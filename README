@@ -1,0 +1,26 @@
+# ⚙ AtualizaDadosSimples
+
+Este projeto tem como objetivo *automatizar processos de atualização e notificação* utilizando serviços gerenciados da *AWS (Amazon Web Services)*.
+
+A aplicação foi desenvolvida com base em uma *orquestração de tarefas via AWS Step Functions, integrando uma **função Lambda* responsável por executar o processamento principal e um *tópico SNS (Simple Notification Service)* que envia *notificações por e-mail* ao final de cada execução.
+
+---
+
+## 🧩 Arquitetura do Projeto
+
+O fluxo de execução funciona da seguinte forma:
+
+1. *Step Function* inicia o processo.
+2. *Lambda* é invocada para executar uma rotina de atualização simples.
+3. Após o término com sucesso, a Step Function *publica uma mensagem no SNS*.
+4. O *SNS envia um e-mail* ao destinatário informado, contendo o status da execução.
+
+A notificação por e-mail possui o seguinte formato:
+
+```json
+{
+  "status": "SUCESSO",
+  "mensagem": "Processo concluído com sucesso!",
+  "execucaoId": "$$.Execution.Id",
+  "inicioExecucao": "$$.Execution.StartTime"
+}
